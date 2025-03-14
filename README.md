@@ -24,12 +24,13 @@ Swift Stories is a demo application that showcases a stories feature similar to 
 
 1. Clone the repository:
 
+```bash
 git clone https://github.com/karkadi/InstagramLikeApp.git
+```
 
 2. Open StoriesApp.xcodeproj in Xcode
 3. Ensure the users.json file is added to the project 
 4. Build and run the project on a simulator or device
-
 
 ## Usage
 1. Launch the app to see the story grid
@@ -44,7 +45,12 @@ git clone https://github.com/karkadi/InstagramLikeApp.git
 - Animations: Spring-based zoom transitions
 - Persistence: UserDefaults for story states
 - Testing: Unit tests for StoryViewModel
-  
+
+## Known Limitations
+- Images must be accessible via HTTPS URLs
+- No error handling for failed image loads
+- Limited to the users in the JSON file
+
 ## License
 This project is licensed under the MIT License.
 
