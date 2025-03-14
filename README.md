@@ -23,5 +23,31 @@ Swift Stories is a demo application that showcases a stories feature similar to 
 ## Installation
 
 1. Clone the repository:
-```bash
+
 git clone https://github.com/karkadi/InstagramLikeApp.git
+
+2. Open StoriesApp.xcodeproj in Xcode
+3. Ensure the users.json file is added to the project 
+4. Build and run the project on a simulator or device
+
+
+## Usage
+1. Launch the app to see the story grid
+2. Tap a story to zoom into the full-screen view
+3. Tap the heart button to like/unlike a story
+4. Tap the close button to return to the grid
+5. Pull down on the grid to refresh the data
+
+## Technical Details
+- Architecture: MVVM-like pattern with StoryViewModel
+- UI Framework: SwiftUI
+- Animations: Spring-based zoom transitions
+- Persistence: UserDefaults for story states
+- Testing: Unit tests for StoryViewModel
+  
+## License
+This project is licensed under the MIT License.
+
+## Acknowledgments
+Built with ❤️ by Arkadiy KAZAZYAN
+Inspired by Instagram Stories
