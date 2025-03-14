@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StoryView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject private var viewModel = StoryViewModel()
+    @ObservedObject var viewModel: StoryViewModel
     @State private var isAnimating = false
     let user: User
    

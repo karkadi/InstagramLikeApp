@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct StoryState: Identifiable, Codable, Equatable {
+struct StoryState: Identifiable, Codable {
     let id: Int
     var isSeen: Bool
     var isLiked: Bool

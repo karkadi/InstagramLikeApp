@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct StoryPreview: View {
+    let viewModel: StoryViewModel
     let user: User
     let isSeen: Bool
     
     var body: some View {
-        NavigationLink(destination: StoryView(user: user)) {
+        NavigationLink(destination: StoryView(viewModel: viewModel, user: user)) {
             VStack(spacing: 8) {
                 AsyncImage(url: URL(string: user.profilePictureUrl)) { image in
                     image

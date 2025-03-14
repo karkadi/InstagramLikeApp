@@ -5,8 +5,6 @@
 //  Created by Arkadiy KAZAZYAN on 14/03/2025.
 //
 
-
-// StoryListView.swift
 import SwiftUI
 
 struct StoryListView: View {
@@ -24,13 +22,14 @@ struct StoryListView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 15) {
                     ForEach(viewModel.users) { user in
-                        StoryPreview(user: user,
+                        StoryPreview(viewModel: viewModel,
+                                     user: user,
                                      isSeen: viewModel.getStoryState(for: user.id)?.isSeen ?? false
                         )
                         .onAppear {
                             if user.id == viewModel.users.last?.id {
                                 // For test purposes , giving errors due to same user ID
-                                //  loadMoreStories()
+                                loadMoreStories()
                             }
                         }
                     }
