@@ -28,7 +28,6 @@ struct StoryListView: View {
                         )
                         .onAppear {
                             if user.id == viewModel.users.last?.id {
-                                // For test purposes , giving errors due to same user ID
                                 loadMoreStories()
                             }
                         }
@@ -54,7 +53,7 @@ struct StoryListView: View {
         guard !isLoadingMore else { return }
         isLoadingMore = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             viewModel.simulateInfiniteScroll()
             isLoadingMore = false
         }

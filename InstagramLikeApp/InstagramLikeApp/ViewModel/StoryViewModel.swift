@@ -71,6 +71,15 @@ class StoryViewModel: ObservableObject {
     }
     
     func simulateInfiniteScroll() {
-        users.append(contentsOf: users)
+        users.append(contentsOf: users.prefix(30))
+        for (index, _) in users.enumerated() {
+            users[index].id = index + 1
+        }
+        storyStates = users.map {
+            if let existingState = getStoryState(for: $0.id) {
+                return existingState
+            }
+            return StoryState(id: $0.id, isSeen: false, isLiked: false)
+        }
     }
 }

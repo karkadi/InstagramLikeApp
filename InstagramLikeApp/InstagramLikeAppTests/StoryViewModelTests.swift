@@ -132,7 +132,7 @@ class StoryViewModelTests: XCTestCase {
         
         // Then
         XCTAssertEqual(viewModel.users.count, initialCount * 2)
-        XCTAssertEqual(viewModel.users[0].id, viewModel.users[initialCount].id)
+        XCTAssertEqual(viewModel.users[viewModel.users.count - 1].id, initialCount * 2)
     }
     
     func testInvalidDataSource() {

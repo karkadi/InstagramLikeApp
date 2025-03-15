@@ -12,7 +12,7 @@ struct StoryView: View {
     @ObservedObject var viewModel: StoryViewModel
     @State private var isAnimating = false
     let user: User
-   
+    
     private var storyState: StoryState? {
         viewModel.storyStates.first(where: { $0.id == user.id })
     }
@@ -26,10 +26,10 @@ struct StoryView: View {
             } placeholder: {
                 ProgressView()
             }
-            //.ignoresSafeArea()
             .frame(maxWidth: isAnimating ? .infinity : 100, maxHeight: isAnimating ? .infinity : 100)
             .clipped()
             .animation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0), value: isAnimating)
+            
         }
         .gesture(DragGesture()
             .onEnded { value in
@@ -50,7 +50,7 @@ struct StoryView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
                     Image(systemName: "xmark")
-                        .foregroundColor(Color("AppTextColor"))
+                        .foregroundColor(.appText)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -64,6 +64,8 @@ struct StoryView: View {
                 }
             }
         }
-        
+        .edgesIgnoringSafeArea(.bottom)
+        .toolbarBackground(.background.opacity(0.5), for: .navigationBar) // Semi-transparent top bar
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 }
