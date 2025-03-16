@@ -10,9 +10,7 @@ A SwiftUI-based iOS application implementing an Instagram Stories-like feature w
 
 Swift Stories is a demo application that showcases a stories feature similar to Instagram, built with Swift and SwiftUI. It includes a grid view of user stories and zoom transitions to full-screen story views.
 
-<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/demo.gif" width="200px" > 
-<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/dark.png" width="200px" > 
-<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/light.png" width="200px" >
+<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/demo.gif" width="200px" > <img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/dark.png" width="200px" > <img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/light.png" width="200px" >
 
 ## Features
 
