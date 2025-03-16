@@ -2,9 +2,17 @@
 
 A SwiftUI-based iOS application implementing an Instagram Stories-like feature with zoom animations.
 
+[![Language: Swift 5](https://img.shields.io/badge/language-swift%205-f48041.svg?style=flat)](https://developer.apple.com/swift)
+[![Platform](https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/platform.svg?style=flat)](https://github.com/karkadi/InstagramLikeApp.git)
+[![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/LICENSE)
+
 ## Overview
 
 Swift Stories is a demo application that showcases a stories feature similar to Instagram, built with Swift and SwiftUI. It includes a grid view of user stories and zoom transitions to full-screen story views.
+
+<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/demo.gif" width="200px" > 
+<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/dark.png" width="200px" > 
+<img src="https://raw.githubusercontent.com/karkadi/InstagramLikeApp/master/ScreenShoots/light.png" width="200px" >
 
 ## Features
 
@@ -29,10 +37,11 @@ git clone https://github.com/karkadi/InstagramLikeApp.git
 ```
 
 2. Open StoriesApp.xcodeproj in Xcode
-3. Ensure the users.json file is added to the project 
+3. Ensure the users.json file is added to the project
 4. Build and run the project on a simulator or device
 
 ## Usage
+
 1. Launch the app to see the story grid
 2. Tap a story to zoom into the full-screen view
 3. Tap the heart button to like/unlike a story
@@ -40,6 +49,7 @@ git clone https://github.com/karkadi/InstagramLikeApp.git
 5. Pull down on the grid to refresh the data
 
 ## Technical Details
+
 - Architecture: MVVM-like pattern with StoryViewModel
 - UI Framework: SwiftUI
 - Animations: Spring-based zoom transitions
@@ -47,13 +57,17 @@ git clone https://github.com/karkadi/InstagramLikeApp.git
 - Testing: Unit tests for StoryViewModel
 
 ## Known Limitations
+
 - Images must be accessible via HTTPS URLs
 - No error handling for failed image loads
 - Limited to the users in the JSON file
 
 ## License
+
 This project is licensed under the MIT License.
+See [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
+
 Built with ❤️ by Arkadiy KAZAZYAN
 Inspired by Instagram Stories
