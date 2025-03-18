@@ -13,7 +13,9 @@ struct StoryPreview: View {
     let isSeen: Bool
     
     var body: some View {
-        NavigationLink(destination: StoryView(viewModel: viewModel, user: user)) {
+        NavigationLink {
+            StoryView(viewModel: viewModel, user: user)
+        } label: {
             VStack(spacing: 8) {
                 AsyncImage(url: URL(string: user.profilePictureUrl)) { image in
                     image
@@ -36,4 +38,16 @@ struct StoryPreview: View {
             }
         }
     }
+}
+
+#Preview {
+    let viewModel = StoryViewModel()
+    let user1 = User(id: 1, name: "Neo", profilePictureUrl: "https://i.pravatar.cc/300?u=1")
+    let user2 = User(id: 1, name: "Neo", profilePictureUrl: "https://i.pravatar.cc/300?u=2")
+    HStack {
+        StoryPreview(viewModel: viewModel, user: user1 , isSeen: false)
+        Spacer()
+        StoryPreview(viewModel: viewModel, user: user2 , isSeen: true)
+    }
+    .padding(60)
 }

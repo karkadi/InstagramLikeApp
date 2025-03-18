@@ -1,5 +1,5 @@
 //
-//  DataManager.swift
+//  StoryViewModel.swift
 //  InstagramLikeApp
 //
 //  Created by Arkadiy KAZAZYAN on 14/03/2025.
@@ -10,76 +10,74 @@ import Foundation
 class StoryViewModel: ObservableObject {
     @Published private(set) var users: [User] = []
     @Published private(set) var storyStates: [StoryState] = []
+    @Published var error: Error? // Added to expose errors to the UI if needed
+    private let repository: StoryRepository
     
-    private let dataSourceURL: URL?
-    
-    init(dataSourceURL: URL? = Bundle.main.url(forResource: "users", withExtension: "json")) {
-        self.dataSourceURL = dataSourceURL
-        loadData()
-        loadStates()
+    init(repository: StoryRepository = LocalStoryRepository()) {
+        self.repository = repository
+        Task { await loadInitialData() }
     }
     
-    func loadData() {
-        guard let url = dataSourceURL,
-              let data = try? Data(contentsOf: url),
-              let storyData = try? JSONDecoder().decode(StoryData.self, from: data) else {
-            return
+    @MainActor
+    func loadInitialData() async {
+        do {
+            let fetchedUsers = try await repository.fetchStories()
+            users = fetchedUsers
+            
+            let savedStates = repository.fetchStoryStates()
+            storyStates = savedStates.isEmpty ?
+            fetchedUsers.map { StoryState(id: $0.id, isSeen: false, isLiked: false) } :
+            savedStates
+            
+            error = nil // Clear any previous errors on success
+        } catch {
+            self.error = error
+            // Fallback to empty array or cached data if available
+            users = []
+            storyStates = repository.fetchStoryStates()
+            // Log the error or handle it appropriately
+            print("Failed to load stories: \(error.localizedDescription)")
         }
-        users = storyData.pages.flatMap { $0.users }
     }
     
-    func loadStates() {
-        if let savedStates = UserDefaults.standard.data(forKey: "storyStates"),
-           let decodedStates = try? JSONDecoder().decode([StoryState].self, from: savedStates) {
-            storyStates = decodedStates
-        } else {
-            storyStates = users.map { StoryState(id: $0.id, isSeen: false, isLiked: false) }
-        }
-    }
-    
-    func saveStates() {
-        if let encoded = try? JSONEncoder().encode(storyStates) {
-            UserDefaults.standard.set(encoded, forKey: "storyStates")
-        }
+    func refreshData() async {
+        await loadInitialData()
     }
     
     func markStoryAsSeen(userId: Int) {
-        updateState(id: userId, isSeen: true)
+        updateState(userId: userId, isSeen: true)
     }
     
     func toggleLike(userId: Int) {
-        if let index = storyStates.firstIndex(where: { $0.id == userId }) {
-            let currentLiked = storyStates[index].isLiked
-            updateState(id: userId, isLiked: !currentLiked)
+        if let state = getStoryState(for: userId) {
+            updateState(userId: userId, isLiked: !state.isLiked)
         }
     }
     
     func getStoryState(for userId: Int) -> StoryState? {
-        storyStates.first(where: { $0.id == userId })
+        storyStates.first { $0.id == userId }
     }
     
-    func updateState(id: Int, isSeen: Bool? = nil, isLiked: Bool? = nil) {
-        if let index = storyStates.firstIndex(where: { $0.id == id }) {
-            if let seen = isSeen {
-                storyStates[index].isSeen = seen
-            }
-            if let liked = isLiked {
-                storyStates[index].isLiked = liked
-            }
-            saveStates()
+    private func updateState(userId: Int, isSeen: Bool? = nil, isLiked: Bool? = nil) {
+        if let index = storyStates.firstIndex(where: { $0.id == userId }) {
+            var state = storyStates[index]
+            if let seen = isSeen { state.isSeen = seen }
+            if let liked = isLiked { state.isLiked = liked }
+            storyStates[index] = state
+            repository.saveStoryStates(storyStates)
         }
     }
     
-    func simulateInfiniteScroll() {
-        users.append(contentsOf: users.prefix(30))
-        for (index, _) in users.enumerated() {
-            users[index].id = index + 1
+    @MainActor
+    func loadMoreStories() async {
+        let newUsers = users.prefix(30).map { user in
+            User(id: users.count + user.id, name: user.name, profilePictureUrl: user.profilePictureUrl)
         }
-        storyStates = users.map {
-            if let existingState = getStoryState(for: $0.id) {
-                return existingState
-            }
-            return StoryState(id: $0.id, isSeen: false, isLiked: false)
+        users.append(contentsOf: newUsers)
+        let newStates = newUsers.map { user in
+            StoryState(id: user.id, isSeen: false, isLiked: false)
         }
+        storyStates.append(contentsOf: newStates)
+        repository.saveStoryStates(storyStates)
     }
 }

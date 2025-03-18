@@ -10,62 +10,58 @@ import SwiftUI
 struct StoryView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel: StoryViewModel
-    @State private var isAnimating = false
     let user: User
     
     private var storyState: StoryState? {
-        viewModel.storyStates.first(where: { $0.id == user.id })
+        viewModel.getStoryState(for: user.id)
     }
     
     var body: some View {
-        VStack {
-            AsyncImage(url: URL(string: user.profilePictureUrl)) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(maxWidth: isAnimating ? .infinity : 100, maxHeight: isAnimating ? .infinity : 100)
-            .clipped()
-            .animation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0), value: isAnimating)
-            
+        AsyncImage(url: URL(string: user.profilePictureUrl)) { image in
+            image
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        } placeholder: {
+            ProgressView()
         }
-        .gesture(DragGesture()
-            .onEnded { value in
-                if value.translation.width > 50 {
-                    dismiss()
-                }
-            }
-        )
         .onAppear {
-            withAnimation {
-                isAnimating = true
-                viewModel.markStoryAsSeen(userId: user.id)
-            }
+            viewModel.markStoryAsSeen(userId: user.id)
         }
-        .navigationBarBackButtonHidden()
-        .navigationBarTitle(user.name, displayMode: .inline)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.appText)
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.white)
                 }
+            }
+            ToolbarItem(placement: .principal) {
+                Text(user.name)
+                    .foregroundColor(.white)
+                    .font(.headline)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    let currentLiked = storyState?.isLiked ?? false
-                    viewModel.updateState(id: user.id, isLiked: !currentLiked)
+                    viewModel.toggleLike(userId: user.id)
                 }) {
-                    Image(systemName: (storyState?.isLiked ?? false) ? "heart.fill" : "heart")
+                    Image(systemName: storyState?.isLiked ?? false ? "heart.fill" : "heart")
                         .foregroundColor(.red)
-                        .font(.system(size: 20))
                 }
             }
         }
-        .edgesIgnoringSafeArea(.bottom)
-        .toolbarBackground(.background.opacity(0.5), for: .navigationBar) // Semi-transparent top bar
+        .toolbarBackground(.black.opacity(0.5), for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+    }
+}
+
+#Preview {
+    let viewModel = StoryViewModel()
+    let user = User(id: 1, name: "Neo", profilePictureUrl: "https://i.pravatar.cc/300?u=1")
+    NavigationStack {
+        StoryView(viewModel: viewModel, user: user )
     }
 }

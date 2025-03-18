@@ -11,7 +11,7 @@ import SwiftUI
 struct InstagramLikeAppApp: App {
     var body: some Scene {
         WindowGroup {
-            StoryListView()
+            StoryGridView()
         }
     }
 }
